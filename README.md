@@ -28,7 +28,7 @@ após, dou um set nas informações alteradas e salvo o objeto!
 
 Metod Remove: verifico a não existencia da secretaria, se existir eu a apago!
 
-'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
+'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
 
 FUNCIONARIO:
 Método de Busca: verificá a não existência, se não existir retorno Optional.empty(),
@@ -55,7 +55,7 @@ Método Remove: Verifico a não existencia do funcionario, se existir instâncio
 numa instância, e a partir dele instÂncio sua secretaria.
 Com essas informações retorno o valor do orçamento ao normal, e deleto o funcionario.
 
-'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
+'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
 
 PROJETO:
 Método de Busca: verificá a não existência, se não existir retorno Optional.empty(),
@@ -71,10 +71,10 @@ Método Update: verifico a existencia do projeto, após, crio uma instância, al
 Método Finaliza Projeto: Um método put que altera a data final do projeto de nulo pra data passada pelo usúario,
 verifico se a data final é maior que a data final com uma instancia, altero as informações e salvo!
 
-'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
+'~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~''~'
 
 Etapa 4°:
 Testes unitários:
-Foi Criado Três testes, eu optei por utilizar o teste de cadastro de cada classe Service!
+Foram Criado Três testes, eu optei por utilizar o teste de cadastro de cada classe Service!
 (Se for testes a mais do que os três, é por que sobrou algum tempo).
 
