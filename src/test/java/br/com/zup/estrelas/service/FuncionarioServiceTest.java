@@ -10,9 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.BeanUtils;
 
 import br.com.zup.estrelas.desafio.sistema.dto.FuncionarioDTO;
 import br.com.zup.estrelas.desafio.sistema.dto.MensagemDTO;
+import br.com.zup.estrelas.desafio.sistema.entity.Funcionario;
 import br.com.zup.estrelas.desafio.sistema.entity.Secretaria;
 import br.com.zup.estrelas.desafio.sistema.repository.FuncionarioRepository;
 import br.com.zup.estrelas.desafio.sistema.repository.SecretariaRepository;

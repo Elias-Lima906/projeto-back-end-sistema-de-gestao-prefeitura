@@ -61,6 +61,11 @@ public class ProjetoService {
 			return new MensagemDTO("O PROJETO EM QUESTÃO NÃO FOI ENCONTRADO!");
 		}
 
+		if (alteraProjetoDTO.getDescricao().isBlank()) {
+			return new MensagemDTO(
+					"A DESCRIÇÃO DO PROJETO DEVE CONTER ALGUM CONTEUDO, NÃO PODE ESTAR VAZIA OU COM APENAS PONTOS!");
+		}
+
 		MensagemDTO alterdoComSucesso = this.alteraProjeto(idProjeto, alteraProjetoDTO);
 
 		return alterdoComSucesso;
@@ -74,7 +79,9 @@ public class ProjetoService {
 		Projeto projeto = projetoRepository.findById(idProjeto).get();
 
 		if (projeto.getDataInicio().isAfter(terminoProjetoDTO.getDataEntrega())) {
-			return new MensagemDTO("A DATA DE TERMINO DEVE SER MAIOR QUE A DATA INICIAL DO PROJETO! -> VOCÊ COMEÇOU NO DIA " + projeto.getDataInicio());
+			return new MensagemDTO(
+					"A DATA DE TERMINO DEVE SER MAIOR QUE A DATA INICIAL DO PROJETO! -> VOCÊ COMEÇOU NO DIA "
+							+ projeto.getDataInicio());
 		}
 
 		MensagemDTO finalizadoComSucesso = this.finalizaProjeto(idProjeto, terminoProjetoDTO);
@@ -84,8 +91,10 @@ public class ProjetoService {
 
 	private MensagemDTO criaProjeto(ProjetoDTO projetoDTO) {
 		Projeto projeto = new Projeto();
+		Secretaria secretaria = secretariaRepository.findById(projetoDTO.getIdSecretaria()).get();
 
 		BeanUtils.copyProperties(projetoDTO, projeto);
+		projeto.setSecretaria(secretaria);
 		projeto.setDataInicio(LocalDate.now());
 		projeto.setDataEntrega(null);
 		projeto.setConcluido(false);

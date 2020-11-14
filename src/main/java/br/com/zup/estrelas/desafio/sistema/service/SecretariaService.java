@@ -43,7 +43,7 @@ public class SecretariaService {
 
 	public MensagemDTO alteraSecretaria(Long idSecretaria, SecretariaDTO secretariaDTO) {
 		if (!secretariaRepository.existsById(idSecretaria)) {
-			return new MensagemDTO("A SECRETARIA EM QEUSTÃO NÃO EXISTE!");
+			return new MensagemDTO("A SECRETARIA EM QUESTÃO NÃO EXISTE!");
 		}
 
 		Secretaria secretaria = secretariaRepository.findById(idSecretaria).get();

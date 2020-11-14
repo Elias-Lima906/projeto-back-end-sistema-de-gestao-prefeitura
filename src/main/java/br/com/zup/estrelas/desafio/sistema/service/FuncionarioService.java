@@ -58,31 +58,36 @@ public class FuncionarioService {
 	}
 
 	public MensagemDTO alteraInformacoesFuncionario(Long idFuncionario, FuncionarioDTO funcionarioDTO) {
-		if (!funcionarioRepository.existsById(idFuncionario)) {
+
+		Optional<Funcionario> antigoCadastroFuncionario = funcionarioRepository.findById(idFuncionario);
+		Optional<Secretaria> secretaria = secretariaRepository
+				.findById(antigoCadastroFuncionario.get().getIdSecretaria());
+
+		if (!antigoCadastroFuncionario.isPresent()) {
 			return new MensagemDTO("FUNCIONARIO NÃO ENCONTRADO NO BANCO DE DADOS!");
 		}
-		if (!secretariaRepository.existsById(funcionarioDTO.getIdSecretaria())) {
-			return new MensagemDTO("A SECRETARIA EM QUESTÃO NÃO EXISTE, TENTE EXCAIXA-LO EM OUTRA SECRETARIA!");
-		}
 
-		Funcionario antigoCadastroFuncionario = funcionarioRepository.findById(idFuncionario).get();
-
-		if (funcionarioDTO.getSalario() < antigoCadastroFuncionario.getSalario()) {
+		if (funcionarioDTO.getSalario() < antigoCadastroFuncionario.get().getSalario()) {
 			return new MensagemDTO("SEGUNDO AS LEIS DO CLT NÃO É POSSÍVEL REDUZIR O SALÁRIO DE UM FUNCIONARIO");
 		}
 
-		Long idAntigaSecretaria = antigoCadastroFuncionario.getIdSecretaria();
-		Secretaria antigaSecretaria = secretariaRepository.findById(idAntigaSecretaria).get();
-		Secretaria novaSecretaria = secretariaRepository.findById(funcionarioDTO.getIdSecretaria()).get();
-
-		if (novaSecretaria.getOrcamentoFolha() < funcionarioDTO.getSalario()) {
-			return new MensagemDTO("A NOVA SECRETARIA NÂO SUPORTA O SALARIO DESTE FUNCIONARIO");
+		if (secretaria.get().getOrcamentoFolha() < funcionarioDTO.getSalario()) {
+			return new MensagemDTO("A SECRETARIA ATUAL NÂO SUPORTA O SALARIO DESTE FUNCIONARIO");
 		}
 
-		if (antigoCadastroFuncionario.getIdSecretaria() != funcionarioDTO.getIdSecretaria()) {
+		Optional<Secretaria> novaSecretaria = secretariaRepository.findById(funcionarioDTO.getIdSecretaria());
 
-			this.atualizaOrcamentoNovaEAntigaSecretaria(antigaSecretaria, novaSecretaria, funcionarioDTO,
-					idFuncionario);
+		if (antigoCadastroFuncionario.get().getIdSecretaria() != funcionarioDTO.getIdSecretaria()) {
+
+			if (!novaSecretaria.isPresent()) {
+				return new MensagemDTO("A SECRETARIA EM QUESTÃO NÃO EXISTE, TENTE EXCAIXA-LO EM OUTRA SECRETARIA!");
+			}
+
+			if (novaSecretaria.get().getOrcamentoFolha() < funcionarioDTO.getSalario()) {
+				return new MensagemDTO("A NOVA SECRETARIA NÂO SUPORTA O SALARIO DESTE FUNCIONARIO");
+			}
+
+			this.atualizaOrcamentoNovaEAntigaSecretaria(secretaria, novaSecretaria, funcionarioDTO, idFuncionario);
 		}
 
 		MensagemDTO alteradoComSucesso = this.alteraFuncionario(funcionarioDTO, novaSecretaria);
@@ -94,6 +99,7 @@ public class FuncionarioService {
 		if (!funcionarioRepository.existsById(idFuncionario)) {
 			return new MensagemDTO("O FUNCIONARIO EM QUESTÃO NÃO FOI ENCONTRADO PELO ID!");
 		}
+		
 		Funcionario funcionario = funcionarioRepository.findById(idFuncionario).get();
 		Secretaria secretaria = secretariaRepository.findById(funcionario.getIdSecretaria()).get();
 
@@ -126,27 +132,27 @@ public class FuncionarioService {
 		return new MensagemDTO("FUNCIONARIO DEVIDAMENTE ADICIONADO AO BANCO DE DADOS");
 	}
 
-	private void atualizaOrcamentoNovaEAntigaSecretaria(Secretaria antigaSecretaria, Secretaria novaSecretaria,
-			FuncionarioDTO funcionarioDTO, Long idFuncionario) {
+	private void atualizaOrcamentoNovaEAntigaSecretaria(Optional<Secretaria> antigaSecretaria,
+			Optional<Secretaria> novaSecretaria, FuncionarioDTO funcionarioDTO, Long idFuncionario) {
 		Funcionario antigoCadastroFuncionario = funcionarioRepository.findById(idFuncionario).get();
 
-		Double orcamentoAntigaSecretariaReajustado = antigaSecretaria.getOrcamentoFolha()
+		Double orcamentoAntigaSecretariaReajustado = antigaSecretaria.get().getOrcamentoFolha()
 				+ antigoCadastroFuncionario.getSalario();
-		Double orcamentoNovaSecretariaReajustado = novaSecretaria.getOrcamentoFolha() - funcionarioDTO.getSalario();
+		Double orcamentoNovaSecretariaReajustado = novaSecretaria.get().getOrcamentoFolha()
+				- funcionarioDTO.getSalario();
 
-		antigaSecretaria.setOrcamentoFolha(orcamentoAntigaSecretariaReajustado);
-		novaSecretaria.setOrcamentoFolha(orcamentoNovaSecretariaReajustado);
+		antigaSecretaria.get().setOrcamentoFolha(orcamentoAntigaSecretariaReajustado);
+		novaSecretaria.get().setOrcamentoFolha(orcamentoNovaSecretariaReajustado);
 
-		secretariaRepository.save(antigaSecretaria);
-		secretariaRepository.save(novaSecretaria);
-
+		secretariaRepository.save(antigaSecretaria.get());
+		secretariaRepository.save(novaSecretaria.get());
 	}
 
-	private MensagemDTO alteraFuncionario(FuncionarioDTO funcionarioDTO, Secretaria novaSecretaria) {
+	private MensagemDTO alteraFuncionario(FuncionarioDTO funcionarioDTO, Optional<Secretaria> novaSecretaria) {
 		Funcionario funcionarioAlterado = funcionarioRepository.findByCpf(funcionarioDTO.getCpf());
 
 		BeanUtils.copyProperties(funcionarioDTO, funcionarioAlterado);
-		funcionarioAlterado.setSecretaria(novaSecretaria);
+		funcionarioAlterado.setSecretaria(novaSecretaria.get());
 
 		funcionarioRepository.save(funcionarioAlterado);
 
