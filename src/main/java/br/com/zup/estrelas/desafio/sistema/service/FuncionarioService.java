@@ -90,6 +90,13 @@ public class FuncionarioService {
 			this.atualizaOrcamentoNovaEAntigaSecretaria(secretaria, novaSecretaria, funcionarioDTO, idFuncionario);
 		}
 
+		boolean verificaIgualdadeSecretaria = antigoCadastroFuncionario.get().getIdSecretaria() == funcionarioDTO
+				.getIdSecretaria();
+
+		if (funcionarioDTO.getSalario() > antigoCadastroFuncionario.get().getSalario() && verificaIgualdadeSecretaria) {
+			alteraOrcamentoPosAumento(funcionarioDTO, novaSecretaria, antigoCadastroFuncionario);
+		}
+
 		MensagemDTO alteradoComSucesso = this.alteraFuncionario(funcionarioDTO, novaSecretaria);
 
 		return alteradoComSucesso;
@@ -99,7 +106,7 @@ public class FuncionarioService {
 		if (!funcionarioRepository.existsById(idFuncionario)) {
 			return new MensagemDTO("O FUNCIONARIO EM QUESTÃO NÃO FOI ENCONTRADO PELO ID!");
 		}
-		
+
 		Funcionario funcionario = funcionarioRepository.findById(idFuncionario).get();
 		Secretaria secretaria = secretariaRepository.findById(funcionario.getIdSecretaria()).get();
 
@@ -130,6 +137,14 @@ public class FuncionarioService {
 		funcionarioRepository.save(funcionario);
 
 		return new MensagemDTO("FUNCIONARIO DEVIDAMENTE ADICIONADO AO BANCO DE DADOS");
+	}
+
+	private void alteraOrcamentoPosAumento(FuncionarioDTO funcionarioDTO, Optional<Secretaria> secretaria,
+			Optional<Funcionario> antigoCadastroFuncionario) {
+		Double diferencaSalarial = funcionarioDTO.getSalario() - antigoCadastroFuncionario.get().getSalario();
+		Double orcamentoFolhaPosAumento = secretaria.get().getOrcamentoFolha() - diferencaSalarial;
+		secretaria.get().setOrcamentoFolha(orcamentoFolhaPosAumento);
+		secretariaRepository.save(secretaria.get());
 	}
 
 	private void atualizaOrcamentoNovaEAntigaSecretaria(Optional<Secretaria> antigaSecretaria,
