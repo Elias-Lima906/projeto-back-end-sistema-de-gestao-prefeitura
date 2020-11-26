@@ -27,7 +27,12 @@ public class ProjetoService {
 	SecretariaRepository secretariaRepository;
 
 	public Optional<Projeto> buscapProjetoPorId(Long idProjeto) {
-		if (!projetoRepository.existsById(idProjeto)) {
+		
+	    // FIXME: Aqui, mano, não é necessário fazer essa validação
+	    // pois o findById retorna um Optional com o projeto se ele
+	    // existir e um empty se ele não existir, o que torna essa 
+	    // validação redundante.
+	    if (!projetoRepository.existsById(idProjeto)) {
 			return Optional.empty();
 		}
 
@@ -82,8 +87,10 @@ public class ProjetoService {
 			return new MensagemDTO(
 					"A DATA DE TERMINO DEVE SER MAIOR QUE A DATA INICIAL DO PROJETO! -> VOCÊ COMEÇOU NO DIA "
 							+ projeto.getDataInicio());
+			//TODO: Foi legal informar a data do projeto nessa resposta.
 		}
 
+		//TODO: Poderia ser um retorno direto.
 		MensagemDTO finalizadoComSucesso = this.finalizaProjeto(idProjeto, terminoProjetoDTO);
 
 		return finalizadoComSucesso;

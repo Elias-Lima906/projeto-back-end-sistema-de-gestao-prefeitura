@@ -37,6 +37,7 @@ public class SecretariaService {
 
 		MensagemDTO criadoComSucesso = criaSecretaria(secretariaDTO);
 
+		// FIXME: poderia ser direto um return criaSecretaria();
 		return criadoComSucesso;
 
 	}
@@ -48,6 +49,7 @@ public class SecretariaService {
 
 		Secretaria secretaria = secretariaRepository.findById(idSecretaria).get();
 		
+		//TODO: Validação corret.
 		if (secretaria.getArea() != secretariaDTO.getArea()
 				&& secretariaRepository.existsByArea(secretariaDTO.getArea())) {
 			return new MensagemDTO("JÁ EXISTE UMA SECRETARIA PARA ESTÁ ÁREA NA PREFEITURA!");
@@ -77,6 +79,7 @@ public class SecretariaService {
 
 		secretariaRepository.save(secretaria);
 
+		//TODO: Boa mano, sempre fazendo algo diferenciado!
 		return new MensagemDTO("SECRETARIA DE(A) " + secretaria.getArea() + " CRIADA COM SUCESSO!");
 	}
 
