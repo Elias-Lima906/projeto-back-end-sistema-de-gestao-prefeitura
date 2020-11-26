@@ -90,6 +90,8 @@ public class FuncionarioService {
 			this.atualizaOrcamentoNovaEAntigaSecretaria(secretaria, novaSecretaria, funcionarioDTO, idFuncionario);
 		}
 
+		// FIXME: Percebe que você já fez essa validação no IF anterior?
+		// Acho que dá pra reestruturar aqui.
 		boolean verificaIgualdadeSecretaria = antigoCadastroFuncionario.get().getIdSecretaria() == funcionarioDTO
 				.getIdSecretaria();
 
@@ -151,6 +153,8 @@ public class FuncionarioService {
 			Optional<Secretaria> novaSecretaria, FuncionarioDTO funcionarioDTO, Long idFuncionario) {
 		Funcionario antigoCadastroFuncionario = funcionarioRepository.findById(idFuncionario).get();
 
+		//FIXME: Você faz vários antigaSecretaria.get() e novaSecretaria.get()
+		// Que tal guardar em uma variável pra evitar esses váris gets?
 		Double orcamentoAntigaSecretariaReajustado = antigaSecretaria.get().getOrcamentoFolha()
 				+ antigoCadastroFuncionario.getSalario();
 		Double orcamentoNovaSecretariaReajustado = novaSecretaria.get().getOrcamentoFolha()

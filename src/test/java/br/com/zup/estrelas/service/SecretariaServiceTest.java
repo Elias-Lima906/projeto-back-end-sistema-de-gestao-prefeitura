@@ -104,6 +104,7 @@ public class SecretariaServiceTest {
 		Mockito.when(secretariaRepository.existsById(1L)).thenReturn(false);
 
 		MensagemDTO mensagemRecebida = secretariaService.alteraSecretaria(1L, secretariaDTO);
+		//FIXME: Um erro de digitação quebrou seu teste, jovem, ajeita aqui.
 		MensagemDTO mensagemEsperada = new MensagemDTO("A SECRETARIA EM QEUSTÃO NÃO EXISTE!");
 
 		Assert.assertEquals(mensagemEsperada, mensagemRecebida);

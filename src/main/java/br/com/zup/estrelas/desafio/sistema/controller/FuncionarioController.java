@@ -20,6 +20,7 @@ import br.com.zup.estrelas.desafio.sistema.entity.Funcionario;
 import br.com.zup.estrelas.desafio.sistema.service.FuncionarioService;
 
 @RestController
+//FIXME: Elias, os recursos devem ser sempre mapeados no plural.
 @RequestMapping("/funcionario")
 public class FuncionarioController {
 

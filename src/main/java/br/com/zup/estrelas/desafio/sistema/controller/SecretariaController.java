@@ -20,6 +20,7 @@ import br.com.zup.estrelas.desafio.sistema.entity.Secretaria;
 import br.com.zup.estrelas.desafio.sistema.service.SecretariaService;
 
 @RestController
+//FIXME: Elias, os recursos devem ser sempre mapeados no plural.
 @RequestMapping("/secretaria")
 public class SecretariaController {
 

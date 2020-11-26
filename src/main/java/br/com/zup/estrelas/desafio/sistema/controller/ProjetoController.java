@@ -21,6 +21,7 @@ import br.com.zup.estrelas.desafio.sistema.entity.Projeto;
 import br.com.zup.estrelas.desafio.sistema.service.ProjetoService;
 
 @RestController
+//FIXME: Elias, os recursos devem ser sempre mapeados no plural.
 @RequestMapping("/projeto")
 public class ProjetoController {
 
